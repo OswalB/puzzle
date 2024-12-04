@@ -2,15 +2,107 @@ let mesa1 = [], mesa2 = []
 const ratio = 15, rowsMax = 5, mesa1x = 100, mesa1y = 100, margin = 2
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
-init();
+const fichas = [], board = [];
 
 
 
+class Ficha {
+    constructor(color) {
+        this.position = 0; // Propiedad independiente, se puede leer y escribir
+        this.color = color; // Propiedad independiente, se puede leer y escribir
+        this.config = 0; // Usada como índice para piezas
+        this.level = 0; // Usada como índice para piezas
+        this.piezas = []; // Estructura multidimensional: piezas[level][config] = [{ px, py }]
 
-function init() {
-    mesa1 = [...loadTable(mesa1x, mesa1y)];
-    drawMesa(mesa1)
+        // Crear la primera pieza al crear la ficha
+        this.addPieza(0, 0);
+    }
+
+    // Métodos de lectura y escritura para config y level
+    setConfig(config) {
+        this.config = config;
+    }
+
+    getConfig() {
+        return this.config;
+    }
+
+    setPosition(position) {
+        this.position = position;
+    }
+
+    getPosition() {
+        return this.position;
+    }
+
+    setLevel(level) {
+        this.level = level;
+    }
+
+    setLevelConfig(level, config) {
+        this.level = level;
+        this.config = config;
+    }
+
+    getLevel() {
+        return this.level;
+    }
+
+    getStatus() {
+        return { level: this.level, config: this.config }
+    }
+
+    // Método para agregar una pieza a los índices actuales (level, config)
+    addPieza(px, py) {
+        if (!this.piezas[this.level]) {
+            this.piezas[this.level] = [];
+        }
+        if (!this.piezas[this.level][this.config]) {
+            this.piezas[this.level][this.config] = [];
+        }
+
+        // Agregar la pieza
+        this.piezas[this.level][this.config].push({ px, py });
+    }
+
+    // Método para obtener las piezas de los índices actuales (level, config)
+    getPiezas() {
+        return this.piezas?.[this.level]?.[this.config]?.map(p => ({ ...p })) || [];
+    }
 }
+
+
+init();
+async function init() {
+    mesa1 = [...loadTable(mesa1x, mesa1y)];
+    drawMesa(mesa1);
+    await crearFichas();
+
+}
+async function crearFichas() {
+
+    // Array para manejar las fichas
+    // Crear una nueva ficha con configuración inicial 0 y posición inicial 10
+
+    //********** mis fichas */  //  pieza[config][nivel]
+    const ficha1 = crearFicha("green");
+    ficha1.addPieza(1, 0);
+
+    console.log(ficha1.color);
+    console.log(ficha1.getPiezas());
+    // Ver el array de fichas
+    console.log(fichas);
+
+}
+
+function crearFicha(color) {
+    const nuevaFicha = new Ficha(color);
+    fichas.push(nuevaFicha);
+    return nuevaFicha;
+}
+
+
+
 
 function loadTable(x, y) {
     const
@@ -22,22 +114,23 @@ function loadTable(x, y) {
         let xx = row % 2 === 0 ? x : x - ratio, yy = y;
         for (let col = 0; col <= ww; col++) {
             let zone = false;
-            if (row >= margin && row-margin < rowsMax) {
+            if (row >= margin && row - margin < rowsMax) {
                 center = Math.round((rowsMax + margin) / 2);
-                l = col >= (center -Math.trunc((row-margin)/2 ));
-                h = col <= (center +Math.round((row-margin)/2 ));
+                l = col >= (center - Math.trunc((row - margin) / 2));
+                h = col <= (center + Math.round((row - margin) / 2));
                 if (l && h) {
                     zone = true;
-                    console.log(row,col)
+                    console.log(row, col)
+                    board.push({ row, col })
                 }
 
             }
             rowArray.push({
                 zone, buzy: false,
-                xx: xx + (ratio * 2 * col*1.02),
-                yy: yy + (ratio * 1.75 * row*1.02)
+                xx: xx + (ratio * 2 * col * 1.02),
+                yy: yy + (ratio * 1.75 * row * 1.02)
             });
-            
+
         }
         arr.push(rowArray);
     }
@@ -58,7 +151,18 @@ function drawMesa(mesaArr) {
 
 }
 
+function putFicha(position, config, level, idFicha, mesa) {
+    const { row, col } = board[position];
+    const ficha = fichas[idFicha];
+    const color = ficha.color;
+    const setPiezas = ficha.getPiezas();
+    setPiezas.forEach(element => {
+        const xx = mesa[row + element.py][col + element.px].xx;
+        const yy = mesa[row + element.py][col + element.px].yy;
+        drawCircle(xx, yy, ratio, color);
 
+    });
+}
 
 
 function drawCircle(x, y, radio, color) {
