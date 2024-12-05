@@ -1,10 +1,20 @@
-let mesa1 = [], mesa2 = []
+let mesa1 = [], mesa2 = [], count=0
 const ratio = 15, rowsMax = 5, mesa1x = 100, mesa1y = 100, margin = 2
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 const fichas = [], board = [];
 
-
+document.addEventListener('keydown', (event) => {
+    // Verifica si la tecla presionada es la flecha derecha
+    if (event.key === 'Enter') {
+        const config = count%6;
+        console.log('pulsada',config);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawMesa(mesa1);
+        setFicha(1,config,0,0,mesa1);
+        count++;
+    }
+});
 
 class Ficha {
     constructor(color) {
@@ -87,11 +97,27 @@ async function crearFichas() {
     //********** mis fichas */  //  pieza[config][nivel]
     const ficha1 = crearFicha("green");
     ficha1.addPieza(1, 0);
-
-    console.log(ficha1.color);
-    console.log(ficha1.getPiezas());
-    // Ver el array de fichas
-    console.log(fichas);
+    ficha1.addPieza(2, 0);
+    ficha1.setConfig(1);
+    ficha1.addPieza(0,0);
+    ficha1.addPieza(1,1);
+    ficha1.addPieza(1,2);
+    ficha1.setConfig(2);
+    ficha1.addPieza(0,0);
+    ficha1.addPieza(0,1);
+    ficha1.addPieza(-1,2);
+    ficha1.setConfig(3);
+    ficha1.addPieza(0,0);
+    ficha1.addPieza(-1,0);
+    ficha1.addPieza(-2,0);
+    ficha1.setConfig(4);
+    ficha1.addPieza(0,0);
+    ficha1.addPieza(0,-1);
+    ficha1.addPieza(-1,-2);
+    ficha1.setConfig(5);
+    ficha1.addPieza(0,0);
+    ficha1.addPieza(1,-1);
+    ficha1.addPieza(1,-2);
 
 }
 
@@ -151,9 +177,10 @@ function drawMesa(mesaArr) {
 
 }
 
-function putFicha(position, config, level, idFicha, mesa) {
+function setFicha(position, config, level, idFicha, mesa) {
     const { row, col } = board[position];
     const ficha = fichas[idFicha];
+    ficha.setConfig(config)
     const color = ficha.color;
     const setPiezas = ficha.getPiezas();
     setPiezas.forEach(element => {
