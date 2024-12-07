@@ -1,19 +1,115 @@
-let mesa1 = [], mesa2 = [], count=0
+let mesa1 = [], mesa2 = [], count = 5, countPos = 0
 const ratio = 15, rowsMax = 5, mesa1x = 100, mesa1y = 100, margin = 2
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 const fichas = [], board = [];
 
+const configuraciones = {
+    pieza0:[
+        {cx:0,cy:0},
+        {cx:0,cy:0},
+        {cx:0,cy:0},
+        {cx:0,cy:0},
+        {cx:0,cy:0},
+        {cx:0,cy:0},
+        {cx:0,cy:0},
+        {cx:0,cy:0},
+        {cx:0,cy:0},
+        {cx:0,cy:0},
+        {cx:0,cy:0},
+        {cx:0,cy:0}
+    ],
+    pieza1:[
+        {cx:0,cy:1},
+        {cx:-1,cy:0},
+        {cx:0,cy:-1},
+        {cx:1,cy:-1},
+        {cx:1,cy:0},
+        {cx:1,cy:1},//pag2
+        {cx:-1,cy:1},
+        {cx:-1,cy:0},
+        {cx:-1,cy:-1},
+        {cx:0,cy:-1},
+        {cx:1,cy:0},
+        {cx:0,cy:1},
+    ],
+    pieza5:[
+        {cx:1,cy:-1},
+        {cx:1,cy:0},
+        {cx:1,cy:1},
+        {cx:0,cy:1},
+        {cx:-1,cy:0},
+        {cx:0,cy:-1},
+        //pag2
+        
+        {cx:0,cy:-1},
+        {cx:1,cy:0},
+        {cx:0,cy:1},
+        {cx:-1,cy:1},
+        {cx:-1,cy:0},
+        {cx:-1,cy:-1},
+    ],
+    pieza2:[
+        {cx:-1,cy:2},
+        {cx:-2,cy:0},
+        {cx:-1,cy:-2},
+        {cx:1,cy:-2},
+        {cx:2,cy:0},
+        {cx:1,cy:2},//pag2
+        {cx:-1,cy:2},
+        {cx:-2,cy:0},
+        {cx:-1,cy:-2},
+        {cx:1,cy:-2},
+        {cx:2,cy:0},
+        {cx:1,cy:2},
+    ],
+    pieza3:[
+        {cx:1,cy:1},
+        {cx:0,cy:1},
+        {cx:-1,cy:0},
+        {cx:0,cy:-1},
+        {cx:1,cy:-1},
+        {cx:1,cy:0},//pag2
+        {cx:0,cy:1},
+        {cx:-1,cy:1},
+        {cx:-1,cy:0},
+        {cx:-1,cy:-1},
+        {cx:0,cy:-1},
+        {cx:1,cy:0},
+
+    ],
+    pieza4:[
+        {cx:0,cy:2},
+        {cx:-1,cy:1},
+        {cx:-1,cy:-1},
+        {cx:0,cy:-2},
+        {cx:2,cy:-1},
+        {cx:2,cy:1},//pag2
+        {cx:0,cy:2},
+        {cx:-2,cy:1},
+        {cx:-2,cy:-1},
+        {cx:0,cy:-2},
+        {cx:1,cy:-1},
+        {cx:1,cy:1},
+
+    ]
+}
+
 document.addEventListener('keydown', (event) => {
     // Verifica si la tecla presionada es la flecha derecha
-    if (event.key === 'Enter') {
-        const config = count%6;
-        console.log('pulsada',config);
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        drawMesa(mesa1);
-        setFicha(1,config,0,0,mesa1);
-        count++;
-    }
+    let localPos = 0
+    if (event.key === 's') countPos++;
+    if (event.key === 'a') countPos += 14;
+    if (event.key === 'Enter') count++;
+    localPos = countPos % 15;
+    const config = count % 6;
+
+    console.log('pos', localPos, 'conf', config);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawMesa(mesa1);
+    setFicha(localPos, config, 0, 0, mesa1);
+
+
 });
 
 class Ficha {
@@ -25,7 +121,7 @@ class Ficha {
         this.piezas = []; // Estructura multidimensional: piezas[level][config] = [{ px, py }]
 
         // Crear la primera pieza al crear la ficha
-        this.addPieza(0, 0);
+        //this.addPieza(0, 0);
     }
 
     // Métodos de lectura y escritura para config y level
@@ -76,9 +172,20 @@ class Ficha {
     }
 
     // Método para obtener las piezas de los índices actuales (level, config)
-    getPiezas() {
+    /*getPiezas() {
         return this.piezas?.[this.level]?.[this.config]?.map(p => ({ ...p })) || [];
-    }
+    }*/
+        getPiezas(row) {
+            if (typeof row !== "number") {
+                throw new Error("El parámetro 'row' debe ser un número.");
+            }
+        
+            const isRowEven = row % 2 === 0; // Determina si la fila es par o impar
+            const adjustedPosition = isRowEven ? this.config : this.config + 6; // Ajusta la posición según el tipo de fila
+        
+            return this.piezas?.[this.level]?.[adjustedPosition]?.map(p => ({ ...p })) || [];
+        }
+        
 }
 
 
@@ -95,29 +202,22 @@ async function crearFichas() {
     // Crear una nueva ficha con configuración inicial 0 y posición inicial 10
 
     //********** mis fichas */  //  pieza[config][nivel]
-    const ficha1 = crearFicha("green");
-    ficha1.addPieza(1, 0);
-    ficha1.addPieza(2, 0);
-    ficha1.setConfig(1);
-    ficha1.addPieza(0,0);
-    ficha1.addPieza(1,1);
-    ficha1.addPieza(1,2);
-    ficha1.setConfig(2);
-    ficha1.addPieza(0,0);
-    ficha1.addPieza(0,1);
-    ficha1.addPieza(-1,2);
-    ficha1.setConfig(3);
-    ficha1.addPieza(0,0);
-    ficha1.addPieza(-1,0);
-    ficha1.addPieza(-2,0);
-    ficha1.setConfig(4);
-    ficha1.addPieza(0,0);
-    ficha1.addPieza(0,-1);
-    ficha1.addPieza(-1,-2);
-    ficha1.setConfig(5);
-    ficha1.addPieza(0,0);
-    ficha1.addPieza(1,-1);
-    ficha1.addPieza(1,-2);
+    
+
+    const ficha2 = crearFicha("grey");
+    configPieza(ficha2,'pieza0');
+    configPieza(ficha2,'pieza1');
+    configPieza(ficha2,'pieza5');
+    //configPieza(ficha2,'pieza4');
+
+}
+
+function configPieza(obj, tipoPieza) {
+    piezaAct = configuraciones[tipoPieza];
+    piezaAct.forEach((configuration, index) =>{
+        obj.setConfig(index);
+        obj.addPieza(configuration.cx, configuration.cy);
+    })
 
 }
 
@@ -126,8 +226,6 @@ function crearFicha(color) {
     fichas.push(nuevaFicha);
     return nuevaFicha;
 }
-
-
 
 
 function loadTable(x, y) {
@@ -146,7 +244,7 @@ function loadTable(x, y) {
                 h = col <= (center + Math.round((row - margin) / 2));
                 if (l && h) {
                     zone = true;
-                    console.log(row, col)
+                    //console.log(row, col)
                     board.push({ row, col })
                 }
 
@@ -180,9 +278,11 @@ function drawMesa(mesaArr) {
 function setFicha(position, config, level, idFicha, mesa) {
     const { row, col } = board[position];
     const ficha = fichas[idFicha];
-    ficha.setConfig(config)
+    ficha.setConfig(config);
+    ficha.setPosition(position);
     const color = ficha.color;
-    const setPiezas = ficha.getPiezas();
+    const setPiezas = ficha.getPiezas(row);
+    console.log(setPiezas)
     setPiezas.forEach(element => {
         const xx = mesa[row + element.py][col + element.px].xx;
         const yy = mesa[row + element.py][col + element.px].yy;
