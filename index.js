@@ -40,8 +40,6 @@ const configuraciones = {
         {cx:0,cy:1},
         {cx:-1,cy:0},
         {cx:0,cy:-1},
-        //pag2
-        
         {cx:0,cy:-1},
         {cx:1,cy:0},
         {cx:0,cy:1},
