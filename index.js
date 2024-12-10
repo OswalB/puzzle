@@ -262,7 +262,7 @@ function drawMesa(mesaArr) {
             const { xx, yy, zone, colord, buzy } = mesaArr[col][row];
             drawVoidCircle(xx, yy, ratio, zone ? 'black' : '#d6dbdf', 1);
             if (buzy) {
-                drawCircle(xx, yy, ratio2, zone?colord: '#d6dbdf');
+                drawCircle(xx, yy, ratio2, zone ? colord : '#d6dbdf');
             }
 
         }
@@ -270,10 +270,10 @@ function drawMesa(mesaArr) {
 
 }
 
-function clear(){
-    mesa1.forEach(row=>{
-        row.forEach(col=>{
-            col.buzy =false;
+function clear() {
+    mesa1.forEach(row => {
+        row.forEach(col => {
+            col.buzy = false;
         })
     })
 
@@ -289,17 +289,17 @@ function setFicha(position, config, level, idFicha, mesa) {
     const setPiezas = ficha.getPiezas(row);
     //console.log(setPiezas)
     for (const element of setPiezas) {
-        const ocupado = mesa[row + element.py][col + element.px].buzy 
+        const ocupado = mesa[row + element.py][col + element.px].buzy
         const desborde = !mesa[row + element.py][col + element.px].zone;
         if (ocupado || desborde) {
-            console.log('ocupado',ocupado , 'desborde',desborde)
+            console.log('ocupado', ocupado, 'desborde', desborde)
             ok = false;
         }
         mesa[row + element.py][col + element.px].buzy = true;
         mesa[row + element.py][col + element.px].colord = color;
     }
     return ok;
-    
+
 }
 
 
@@ -323,3 +323,58 @@ function drawVoidCircle(x, y, radio, colorBorde, grosorBorde) {
 // Dibujar varios círculos
 //drawCircle(200, 200, 50, "green");   // Círculo rojo en (100, 100) con radio 50
 
+function explorar(fichas, mesa) {
+    const totalPosiciones = 15; // Número de posiciones en el tablero
+    const totalConfiguraciones = 6; // Configuraciones posibles por ficha
+    const level = 0; // Nivel fijo según el problema
+
+    // Array para almacenar combinaciones válidas
+    const combinacionesValidas = [];
+
+    // Recorrer todas las combinaciones de idFicha, config y position
+    for (let idFicha = 0; idFicha < fichas.length; idFicha++) {
+        for (let position = 0; position < totalPosiciones; position++) {
+            let configuracionValidaEncontrada = false;
+
+            for (let config = 0; config < totalConfiguraciones; config++) {
+                // Intentar colocar la ficha en la posición con la configuración dada
+                const setOk = setFicha(position, config, level, idFicha, mesa);
+                drawMesa(mesa1);
+                if (setOk) {
+                    // Si es válida, guardar la combinación
+                    combinacionesValidas.push({ idFicha, config, position });
+                    console.log(`Válido: idFicha=${idFicha}, config=${config}, position=${position}`);
+                    configuracionValidaEncontrada = true;
+
+                    // No seguimos probando más configuraciones si una ya es válida
+                    break;
+                } else {
+                    // Limpiar la mesa si la combinación no es válida
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    clear(mesa);
+                }
+            }
+
+            // Si no encontramos ninguna configuración válida, abortamos el resto de posiciones
+            if (!configuracionValidaEncontrada) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                clear(mesa); // Asegurarse de limpiar antes de pasar a la siguiente posición
+                break;
+            }
+        }
+    }
+
+    // Mostrar el total de combinaciones válidas encontradas
+    console.log(`Total de combinaciones válidas: ${combinacionesValidas.length}`);
+    return combinacionesValidas;
+}
+
+// Ejemplo de uso
+async function explore() {
+    const valms = document.getElementById('delay');
+    for (let i = 0; i < 10; i++) {
+        console.log(i); // Muestra el índice
+        await new Promise(resolve => setTimeout(resolve, parseInt(valms.value))); // Espera 3 segundos
+    }
+    console.log("Fin del bucle");
+}
