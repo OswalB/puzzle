@@ -5,92 +5,92 @@ const ctx = canvas.getContext("2d");
 const fichas = [], board = [];
 
 const configuraciones = {
-    pieza0:[
-        {cx:0,cy:0},
-        {cx:0,cy:0},
-        {cx:0,cy:0},
-        {cx:0,cy:0},
-        {cx:0,cy:0},
-        {cx:0,cy:0},
-        {cx:0,cy:0},
-        {cx:0,cy:0},
-        {cx:0,cy:0},
-        {cx:0,cy:0},
-        {cx:0,cy:0},
-        {cx:0,cy:0}
+    pieza0: [
+        { cx: 0, cy: 0 },
+        { cx: 0, cy: 0 },
+        { cx: 0, cy: 0 },
+        { cx: 0, cy: 0 },
+        { cx: 0, cy: 0 },
+        { cx: 0, cy: 0 },
+        { cx: 0, cy: 0 },
+        { cx: 0, cy: 0 },
+        { cx: 0, cy: 0 },
+        { cx: 0, cy: 0 },
+        { cx: 0, cy: 0 },
+        { cx: 0, cy: 0 }
     ],
-    pieza1:[
-        {cx:0,cy:1},
-        {cx:-1,cy:0},
-        {cx:0,cy:-1},
-        {cx:1,cy:-1},
-        {cx:1,cy:0},
-        {cx:1,cy:1},//pag2
-        {cx:-1,cy:1},
-        {cx:-1,cy:0},
-        {cx:-1,cy:-1},
-        {cx:0,cy:-1},
-        {cx:1,cy:0},
-        {cx:0,cy:1},
+    pieza1: [
+        { cx: 0, cy: 1 },
+        { cx: -1, cy: 0 },
+        { cx: 0, cy: -1 },
+        { cx: 1, cy: -1 },
+        { cx: 1, cy: 0 },
+        { cx: 1, cy: 1 },//pag2
+        { cx: -1, cy: 1 },
+        { cx: -1, cy: 0 },
+        { cx: -1, cy: -1 },
+        { cx: 0, cy: -1 },
+        { cx: 1, cy: 0 },
+        { cx: 0, cy: 1 },
     ],
-    pieza5:[
-        {cx:1,cy:-1},
-        {cx:1,cy:0},
-        {cx:1,cy:1},
-        {cx:0,cy:1},
-        {cx:-1,cy:0},
-        {cx:0,cy:-1},
+    pieza5: [
+        { cx: 1, cy: -1 },
+        { cx: 1, cy: 0 },
+        { cx: 1, cy: 1 },
+        { cx: 0, cy: 1 },
+        { cx: -1, cy: 0 },
+        { cx: 0, cy: -1 },
         //pag2
-        
-        {cx:0,cy:-1},
-        {cx:1,cy:0},
-        {cx:0,cy:1},
-        {cx:-1,cy:1},
-        {cx:-1,cy:0},
-        {cx:-1,cy:-1},
+
+        { cx: 0, cy: -1 },
+        { cx: 1, cy: 0 },
+        { cx: 0, cy: 1 },
+        { cx: -1, cy: 1 },
+        { cx: -1, cy: 0 },
+        { cx: -1, cy: -1 },
     ],
-    pieza2:[
-        {cx:-1,cy:2},
-        {cx:-2,cy:0},
-        {cx:-1,cy:-2},
-        {cx:1,cy:-2},
-        {cx:2,cy:0},
-        {cx:1,cy:2},//pag2
-        {cx:-1,cy:2},
-        {cx:-2,cy:0},
-        {cx:-1,cy:-2},
-        {cx:1,cy:-2},
-        {cx:2,cy:0},
-        {cx:1,cy:2},
+    pieza2: [
+        { cx: -1, cy: 2 },
+        { cx: -2, cy: 0 },
+        { cx: -1, cy: -2 },
+        { cx: 1, cy: -2 },
+        { cx: 2, cy: 0 },
+        { cx: 1, cy: 2 },//pag2
+        { cx: -1, cy: 2 },
+        { cx: -2, cy: 0 },
+        { cx: -1, cy: -2 },
+        { cx: 1, cy: -2 },
+        { cx: 2, cy: 0 },
+        { cx: 1, cy: 2 },
     ],
-    pieza3:[
-        {cx:1,cy:1},
-        {cx:0,cy:1},
-        {cx:-1,cy:0},
-        {cx:0,cy:-1},
-        {cx:1,cy:-1},
-        {cx:1,cy:0},//pag2
-        {cx:0,cy:1},
-        {cx:-1,cy:1},
-        {cx:-1,cy:0},
-        {cx:-1,cy:-1},
-        {cx:0,cy:-1},
-        {cx:1,cy:0},
+    pieza3: [
+        { cx: 1, cy: 1 },
+        { cx: 0, cy: 1 },
+        { cx: -1, cy: 0 },
+        { cx: 0, cy: -1 },
+        { cx: 1, cy: -1 },
+        { cx: 1, cy: 0 },//pag2
+        { cx: 0, cy: 1 },
+        { cx: -1, cy: 1 },
+        { cx: -1, cy: 0 },
+        { cx: -1, cy: -1 },
+        { cx: 0, cy: -1 },
+        { cx: 1, cy: 0 },
 
     ],
-    pieza4:[
-        {cx:0,cy:2},
-        {cx:-1,cy:1},
-        {cx:-1,cy:-1},
-        {cx:0,cy:-2},
-        {cx:2,cy:-1},
-        {cx:2,cy:1},//pag2
-        {cx:0,cy:2},
-        {cx:-2,cy:1},
-        {cx:-2,cy:-1},
-        {cx:0,cy:-2},
-        {cx:1,cy:-1},
-        {cx:1,cy:1},
+    pieza4: [
+        { cx: 0, cy: 2 },
+        { cx: -1, cy: 1 },
+        { cx: -1, cy: -1 },
+        { cx: 0, cy: -2 },
+        { cx: 2, cy: -1 },
+        { cx: 2, cy: 1 },//pag2
+        { cx: 0, cy: 2 },
+        { cx: -2, cy: 1 },
+        { cx: -2, cy: -1 },
+        { cx: 0, cy: -2 },
+        { cx: 1, cy: -1 },
+        { cx: 1, cy: 1 },
 
     ]
 }
@@ -104,27 +104,26 @@ document.addEventListener('keydown', (event) => {
     localPos = countPos % 15;
     const config = count % 6;
 
-    console.log('pos', localPos, 'conf', config);
+    //console.log('pos', localPos, 'conf', config);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    clear();
+    const setOk = setFicha(localPos, config, 0, 0, mesa1);
+    console.log(setOk)
     drawMesa(mesa1);
-    setFicha(localPos, config, 0, 0, mesa1);
+    //setFicha(localPos, config, 0, 0, mesa1);
 
 
 });
 
 class Ficha {
     constructor(color) {
-        this.position = 0; // Propiedad independiente, se puede leer y escribir
-        this.color = color; // Propiedad independiente, se puede leer y escribir
-        this.config = 0; // Usada como índice para piezas
-        this.level = 0; // Usada como índice para piezas
+        this.position = 0;
+        this.color = color;
+        this.config = 0;
+        this.level = 0;
         this.piezas = []; // Estructura multidimensional: piezas[level][config] = [{ px, py }]
-
-        // Crear la primera pieza al crear la ficha
-        //this.addPieza(0, 0);
     }
 
-    // Métodos de lectura y escritura para config y level
     setConfig(config) {
         this.config = config;
     }
@@ -171,21 +170,18 @@ class Ficha {
         this.piezas[this.level][this.config].push({ px, py });
     }
 
-    // Método para obtener las piezas de los índices actuales (level, config)
-    /*getPiezas() {
-        return this.piezas?.[this.level]?.[this.config]?.map(p => ({ ...p })) || [];
-    }*/
-        getPiezas(row) {
-            if (typeof row !== "number") {
-                throw new Error("El parámetro 'row' debe ser un número.");
-            }
-        
-            const isRowEven = row % 2 === 0; // Determina si la fila es par o impar
-            const adjustedPosition = isRowEven ? this.config : this.config + 6; // Ajusta la posición según el tipo de fila
-        
-            return this.piezas?.[this.level]?.[adjustedPosition]?.map(p => ({ ...p })) || [];
+
+    getPiezas(row) {
+        if (typeof row !== "number") {
+            throw new Error("El parámetro 'row' debe ser un número.");
         }
-        
+
+        const isRowEven = row % 2 === 0; // Determina si la fila es par o impar
+        const adjustedPosition = isRowEven ? this.config : this.config + 6; // Ajusta la posición según el tipo de fila
+
+        return this.piezas?.[this.level]?.[adjustedPosition]?.map(p => ({ ...p })) || [];
+    }
+
 }
 
 
@@ -198,23 +194,17 @@ async function init() {
 }
 async function crearFichas() {
 
-    // Array para manejar las fichas
-    // Crear una nueva ficha con configuración inicial 0 y posición inicial 10
-
-    //********** mis fichas */  //  pieza[config][nivel]
-    
-
-    const ficha2 = crearFicha("grey");
-    configPieza(ficha2,'pieza0');
-    configPieza(ficha2,'pieza1');
-    configPieza(ficha2,'pieza5');
+    const ficha2 = crearFicha("red");
+    configPieza(ficha2, 'pieza0');
+    configPieza(ficha2, 'pieza1');
+    configPieza(ficha2, 'pieza5');
     //configPieza(ficha2,'pieza4');
 
 }
 
 function configPieza(obj, tipoPieza) {
     piezaAct = configuraciones[tipoPieza];
-    piezaAct.forEach((configuration, index) =>{
+    piezaAct.forEach((configuration, index) => {
         obj.setConfig(index);
         obj.addPieza(configuration.cx, configuration.cy);
     })
@@ -266,29 +256,50 @@ function loadTable(x, y) {
 
 function drawMesa(mesaArr) {
     const ww = rowsMax + (margin * 2);
+    const ratio2 = ratio * 0.92;
     for (let row = 0; row <= ww; row++) {
         for (let col = 0; col <= ww; col++) {
-            const { xx, yy, zone } = mesaArr[col][row];
+            const { xx, yy, zone, colord, buzy } = mesaArr[col][row];
             drawVoidCircle(xx, yy, ratio, zone ? 'black' : '#d6dbdf', 1);
+            if (buzy) {
+                drawCircle(xx, yy, ratio2, zone?colord: '#d6dbdf');
+            }
+
         }
     }
+
+}
+
+function clear(){
+    mesa1.forEach(row=>{
+        row.forEach(col=>{
+            col.buzy =false;
+        })
+    })
 
 }
 
 function setFicha(position, config, level, idFicha, mesa) {
     const { row, col } = board[position];
     const ficha = fichas[idFicha];
+    let ok = true;
     ficha.setConfig(config);
     ficha.setPosition(position);
     const color = ficha.color;
     const setPiezas = ficha.getPiezas(row);
-    console.log(setPiezas)
-    setPiezas.forEach(element => {
-        const xx = mesa[row + element.py][col + element.px].xx;
-        const yy = mesa[row + element.py][col + element.px].yy;
-        drawCircle(xx, yy, ratio, color);
-
-    });
+    //console.log(setPiezas)
+    for (const element of setPiezas) {
+        const ocupado = mesa[row + element.py][col + element.px].buzy 
+        const desborde = !mesa[row + element.py][col + element.px].zone;
+        if (ocupado || desborde) {
+            console.log('ocupado',ocupado , 'desborde',desborde)
+            ok = false;
+        }
+        mesa[row + element.py][col + element.px].buzy = true;
+        mesa[row + element.py][col + element.px].colord = color;
+    }
+    return ok;
+    
 }
 
 
