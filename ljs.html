@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Combinaciones</title>
+</head>
+<body>
+  <script>
+    // Función para generar permutaciones de lugares
+    function generarCombinaciones() {
+      const objetos = [1, 2, 3]; // Los 3 objetos
+      const lugares = [0, 1, 2, 3, 4]; // Índices de los 5 lugares
+
+      // Generar todas las combinaciones de 3 lugares entre 5
+      function combinaciones(array, k) {
+        if (k === 0) return [[]];
+        if (array.length === 0) return [];
+        const [primero, ...resto] = array;
+        const conPrimero = combinaciones(resto, k - 1).map(comb => [primero, ...comb]);
+        const sinPrimero = combinaciones(resto, k);
+        return conPrimero.concat(sinPrimero);
+      }
+
+      // Generar permutaciones para los lugares seleccionados
+      function permutaciones(array) {
+        if (array.length === 0) return [[]];
+        return array.flatMap((val, i) =>
+          permutaciones(array.slice(0, i).concat(array.slice(i + 1))).map(perm => [val, ...perm])
+        );
+      }
+
+      // Combinaciones de 3 lugares entre 5
+      const combinacionesLugares = combinaciones(lugares, 3);
+
+      // Generar todas las permutaciones de objetos para cada combinación de lugares
+      const resultados = [];
+      combinacionesLugares.forEach(lugaresSeleccionados => {
+        permutaciones(objetos).forEach(permutacionObjetos => {
+          const fila = Array(5).fill(null); // Inicializar lugares vacíos
+          lugaresSeleccionados.forEach((lugar, i) => {
+            fila[lugar] = permutacionObjetos[i];
+          });
+          resultados.push(fila);
+        });
+      });
+
+      // Mostrar resultados en la consola
+      console.log("Total de combinaciones:", resultados.length);
+      resultados.forEach((fila, i) => console.log(Fila ${i + 1}:, fila));
+    }
+
+    // Ejecutar la función
+    generarCombinaciones();
+  </script>
+</body>
+</html>
