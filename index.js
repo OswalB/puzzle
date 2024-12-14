@@ -1,9 +1,9 @@
 let mesa1 = [], mesa2 = [], count = 5, countPos = 0, salir = false;
-let countF = -1;
+let countF = -1, countSuccess = 0, paint = false;
 const ratio = 15, rowsMax = 5, mesa1x = 100, mesa1y = 100, margin = 2
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
-const fichas = [], board = [];
+const fichas = [], board = [], success = [];
 
 const configuraciones = {
     pieza0: [
@@ -97,21 +97,33 @@ const configuraciones = {
 document.addEventListener('keydown', (event) => {
     // Verifica si la tecla presionada es la flecha derecha
     let localPos = 0
+    if (event.key === 'z') countSuccess = 0;
+
     if (event.key === 's') countPos++;
     if (event.key === 'a') countPos += 14;
     if (event.key === 'Enter') count++;
     if (event.key === 'f') countF++;
-    localPos = countPos % 15;
-    const config = count % 6;
-    const idFicha = countF % fichas.length;
-    //console.log('pos', localPos, 'conf', config);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    clear();
-    const setOk = setFicha(localPos, config, 0, idFicha, mesa1);
-    console.log(`Test: ${setOk}, P: ${localPos}, C: ${config}, F: ${idFicha} `)
-    drawMesa(mesa1);
-    //setFicha(localPos, config, 0, 0, mesa1);
-
+    if (event.key === 'k') {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        clear();
+        success[countSuccess].forEach(element => {
+            setFicha(element.lugar, element.config, 0, element.idFicha, mesa1);
+            drawMesa(mesa1);
+        })
+        countSuccess++;
+    }
+    if (['s', 'a', 'Enter', 'f'].includes(event.key)) {
+        localPos = countPos % 15;
+        const config = count % 6;
+        const idFicha = countF % fichas.length;
+        //console.log('pos', localPos, 'conf', config);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        clear();
+        const setOk = setFicha(localPos, config, 0, idFicha, mesa1);
+        console.log(`Test: ${setOk}, P: ${localPos}, C: ${config}, F: ${idFicha} `)
+        drawMesa(mesa1);
+        //setFicha(localPos, config, 0, 0, mesa1);
+    }
 
 });
 
@@ -198,7 +210,27 @@ async function crearFichas() {
     configPieza(ficha2, 'pieza0');
     configPieza(ficha2, 'pieza1');
     configPieza(ficha2, 'pieza5');
+
+    const ficha1 = crearFicha("green");
+    configPieza(ficha1, 'pieza0');
+    configPieza(ficha1, 'pieza1');
+    configPieza(ficha1, 'pieza2');
     //configPieza(ficha2,'pieza4');
+
+    const ficha0 = crearFicha("blue");
+    configPieza(ficha0, 'pieza0');
+    configPieza(ficha0, 'pieza1');
+    configPieza(ficha0, 'pieza4');
+
+    const ficha3 = crearFicha("yellow");
+    configPieza(ficha3, 'pieza0');
+    configPieza(ficha3, 'pieza3');
+    configPieza(ficha3, 'pieza4');
+
+    const ficha4 = crearFicha("brown");
+    configPieza(ficha4, 'pieza0');
+    configPieza(ficha4, 'pieza1');
+    configPieza(ficha4, 'pieza3');
 
 }
 
@@ -293,7 +325,7 @@ function setFicha(position, config, level, idFicha, mesa) {
         const ocupado = mesa[row + element.py][col + element.px].buzy
         const desborde = !mesa[row + element.py][col + element.px].zone;
         if (ocupado || desborde) {
-            console.log('ocupado', ocupado, 'desborde', desborde)
+            //console.log('ocupado', ocupado, 'desborde', desborde);
             ok = false;
         }
         mesa[row + element.py][col + element.px].buzy = true;
@@ -415,22 +447,29 @@ function permutaciones(array) {
 }
 
 // Función principal
-async function generarCombinaciones() {
-const valms = document.getElementById('delay');
+async function generarCombinaciones(localBoard) {
+    const valms = document.getElementById('delay');
+    let intentos = 0;
+    //const success = []; // Array para almacenar configuraciones exitosas
     const objetos = []; // Array de objetos (puede cambiar dinámicamente)
     for (let i in fichas) {
         objetos.push(parseInt(i));
     }
-    const lugares = [0, 1, 2, 3, 4,5,6,7,8,9,10,11,12,13,14]; // Array de lugares (puede cambiar dinámicamente)
+    //const lugares = [0, 1, 2, 3, 4, 5];
+    //const lugares = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]; // Array de lugares (puede cambiar dinámicamente)
+    
+    
+    const lugares = [];
+    for (let i in localBoard) {
+        lugares.push(parseInt(i));
+    }
+    
     const posiciones = [0, 1, 2, 3, 4, 5]; // Posiciones (como números)
 
     const numeroObjetos = objetos.length;
 
     // Generar combinaciones de lugares en función del tamaño de objetos
     const combinacionesLugares = combinaciones(lugares, numeroObjetos);
-
-    // Resultado final
-    const resultados = [];
 
     // Función para asignar posiciones
     function asignarPosiciones(indices) {
@@ -446,31 +485,46 @@ const valms = document.getElementById('delay');
         for (let permutacionObjetos of permutaciones(objetos)) {
             const asignaciones = asignarPosiciones(permutacionObjetos);
             for (let asignacion of asignaciones) {
+                if (paint) {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                }
+
+                clear();
+
+                let countFail = 0;
+                const configuracionActual = []; // Array temporal para almacenar la configuración actual
+
                 for (let i = 0; i < lugaresSeleccionados.length; i++) {
+                    intentos++;
+                    if (intentos % 5000 === 0) console.log(intentos/1000000);
                     const lugar = lugaresSeleccionados[i];
                     const [idFicha, config] = asignacion[i];
                     const localPos = lugar;
 
-                    // Limpiar y redibujar canvas
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    clear();
-
-                    // Llamada a setFicha y redibujar mesa
                     const setOk = setFicha(localPos, config, 0, idFicha, mesa1);
-                    drawMesa(mesa1);
+                    if (!setOk) {
+                        countFail++;
+                        break; // Si hay error, no es necesario continuar esta configuración
+                    }
 
-                    // Pausa controlada
-                    await new Promise(resolve => setTimeout(resolve, parseInt(valms.value)));
-
-                    // Almacenar resultados
-                    resultados.push(setOk);
+                    configuracionActual.push({ lugar, config, idFicha });
                 }
+
+                if (countFail === 0) {
+                    success.push([...configuracionActual]); // Guardar configuración exitosa
+                    console.log('combinacion ok en linea: ', intentos)
+                }
+                if (paint) {
+                    drawMesa(mesa1);
+                    await new Promise(resolve => setTimeout(resolve, parseInt(valms.value)));
+                }
+
+
             }
         }
     }
-
-    // Mostrar resultados en la consola
-    console.log("Resultados de llamadas a setFicha:", resultados);
+    console.log("Combinaciones probadas:", intentos);
+    console.log("Configuraciones exitosas:", success);
 }
 
 
