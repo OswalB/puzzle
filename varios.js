@@ -27216,3 +27216,169 @@
         }
     ]
 ]
+
+
+[
+    [
+        {
+            "localPos": 1,
+            "config": 0,
+            "idFicha": 0
+        },
+        {
+            "localPos": 1,
+            "config": 3,
+            "idFicha": 0
+        }
+    ],
+    [
+        {
+            "localPos": 2,
+            "config": 0,
+            "idFicha": 1
+        },
+        {
+            "localPos": 2,
+            "config": 5,
+            "idFicha": 1
+        }
+    ],
+    [
+        {
+            "localPos": 3,
+            "config": 0,
+            "idFicha": 2
+        },
+        {
+            "localPos": 3,
+            "config": 4,
+            "idFicha": 2
+        },
+        {
+            "localPos": 3,
+            "config": 5,
+            "idFicha": 2
+        }
+    ],
+    [
+        {
+            "localPos": 4,
+            "config": 0,
+            "idFicha": 3
+        },
+        {
+            "localPos": 4,
+            "config": 1,
+            "idFicha": 3
+        },
+        {
+            "localPos": 4,
+            "config": 3,
+            "idFicha": 3
+        },
+        {
+            "localPos": 4,
+            "config": 5,
+            "idFicha": 3
+        }
+    ],
+    [
+        {
+            "localPos": 5,
+            "config": 0,
+            "idFicha": 4
+        },
+        {
+            "localPos": 5,
+            "config": 1,
+            "idFicha": 4
+        },
+        {
+            "localPos": 5,
+            "config": 2,
+            "idFicha": 4
+        }
+    ],
+    [
+        [
+            {
+                "localPos": 1,
+                "config": 0,
+                "idFicha": 0
+            },
+            {
+                "localPos": 1,
+                "config": 3,
+                "idFicha": 0
+            }
+        ],
+        [
+            {
+                "localPos": 2,
+                "config": 0,
+                "idFicha": 1
+            },
+            {
+                "localPos": 2,
+                "config": 5,
+                "idFicha": 1
+            }
+        ],
+        [
+            {
+                "localPos": 3,
+                "config": 0,
+                "idFicha": 2
+            },
+            {
+                "localPos": 3,
+                "config": 4,
+                "idFicha": 2
+            },
+            {
+                "localPos": 3,
+                "config": 5,
+                "idFicha": 2
+            }
+        ],
+        [
+            {
+                "localPos": 4,
+                "config": 0,
+                "idFicha": 3
+            },
+            {
+                "localPos": 4,
+                "config": 1,
+                "idFicha": 3
+            },
+            {
+                "localPos": 4,
+                "config": 3,
+                "idFicha": 3
+            },
+            {
+                "localPos": 4,
+                "config": 5,
+                "idFicha": 3
+            }
+        ],
+        [
+            {
+                "localPos": 6,
+                "config": 0,
+                "idFicha": 4
+            },
+            {
+                "localPos": 6,
+                "config": 4,
+                "idFicha": 4
+            },
+            {
+                "localPos": 6,
+                "config": 5,
+                "idFicha": 4
+            }
+        ]
+    ]
+]
