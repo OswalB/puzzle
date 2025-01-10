@@ -1,4 +1,4 @@
-let mesa1 = [], mesa2 = [], salir = false, erase = [], configuraciones;
+let mesa1 = [], mesa2 = [], salir = false, erase = [], configuraciones, successFinal = [];
 let count = {
     config: 0, position: 0, ficha: 0,
     level: 0, estado: 0, exito: 0
@@ -16,31 +16,38 @@ const set2 = [5, 6, 7, 8, 9, 10];
 function final() {
     const level = 1;
     for (let i = 0; i < successB.length; i++) {
-        success.forEach(tableroA => {
-            clear();
-            const temPrueba = {tableroA:{},tableroB:{} }
-            successB[i].forEach(pieza => {
-                const { position, config, idFicha } = pieza;
-                testFicha(position, config, level, idFicha, mesa1);
-            });
-            let error = false;
-            for(let p = 0; p < tableroA.length; p++){
-                
-                const { position, config, idFicha } = tableroA;
-                error = testFicha(position, config, level, idFicha, mesa1);
-                if( error)break;
+        const temPrueba = { tableroA: [], tableroB: [] };
+        temPrueba.tableroA.push(success[i]);
+        //success[i].forEach(tableroA => {
+        clear();
+        successB[i].forEach(pieza => {
+            const { position, config, idFicha } = pieza;
+            testFicha(position, config, level, idFicha, false);
+        });
+        let error = false;
+        for (let p = 0; p < success.length; p++) {
+            temPrueba.tableroB.push(success[p]);
+            for (let c = 0; c < success[p].length; p++) {
+                const { position, config, idFicha } = success[p][c];
+                error = testFicha(position, config, 0, idFicha, false);
+                if (error) break;
             }
-            if(!error){
-                successFinal
-            }
-        })
 
-        
+
+
+        }
+        if (!error) {
+            successFinal.push(temPrueba);
+            console.log(temPrueba);
+        }
+        //})
+
+
     }
-    drawMesa(mesa1)
+    //drawMesa(mesa1)
 }
 
-function initArrays() {
+async function initArrays() {
     configs.push(0, 1, 2, 3, 4, 5);
     count.config = configs.length - 1;
     const ax = 2, ay = 2;
@@ -3391,6 +3398,105 @@ function initArrays() {
         }
     ]
 
+    prueba = [
+        [
+            {
+                "position": 0,
+                "config": 0,
+                "idFicha": 5
+            },
+            {
+                "position": 3,
+                "config": 0,
+                "idFicha": 6
+            },
+            {
+                "position": 5,
+                "config": 5,
+                "idFicha": 7
+            },
+            {
+                "position": 13,
+                "config": 4,
+                "idFicha": 8
+            },
+            {
+                "position": 11,
+                "config": 1,
+                "idFicha": 9
+            },
+            {
+                "position": 7,
+                "config": 5,
+                "idFicha": 10
+            }
+        ],
+        [
+            {
+                "position": 0,
+                "config": 0,
+                "idFicha": 5
+            },
+            {
+                "position": 3,
+                "config": 0,
+                "idFicha": 6
+            },
+            {
+                "position": 9,
+                "config": 5,
+                "idFicha": 7
+            },
+            {
+                "position": 12,
+                "config": 4,
+                "idFicha": 8
+            },
+            {
+                "position": 11,
+                "config": 1,
+                "idFicha": 9
+            },
+            {
+                "position": 4,
+                "config": 0,
+                "idFicha": 10
+            }
+        ],
+        [
+            {
+                "position": 0,
+                "config": 0,
+                "idFicha": 5
+            },
+            {
+                "position": 3,
+                "config": 0,
+                "idFicha": 6
+            },
+            {
+                "position": 11,
+                "config": 1,
+                "idFicha": 7
+            },
+            {
+                "position": 5,
+                "config": 1,
+                "idFicha": 8
+            },
+            {
+                "position": 12,
+                "config": 2,
+                "idFicha": 9
+            },
+            {
+                "position": 13,
+                "config": 4,
+                "idFicha": 10
+            }
+        ]
+    ]
+
 }
 
 function combinar() {
@@ -3493,9 +3599,14 @@ function combinar2() {
 function testFicha(position, config, level, idFicha, paint = true) {
     const boardLevel = boards[level][position];
     const boardBackup = boards[2][position];
-    const row = boardLevel[1], col = boardLevel[0];
-    const rowB = boardBackup[1], colB = boardBackup[0];
     const ficha = fichas[idFicha];
+    const rowB = boards[2][position][1];
+    const colB = boards[2][position][0];
+
+    const col = boards[level][position][0];
+    const row = boards[level][position][1];
+
+
 
     ficha.setConfigPos(config, position);
     //ficha.setPosition(position);
@@ -3523,7 +3634,7 @@ function testFicha(position, config, level, idFicha, paint = true) {
 
 document.addEventListener("DOMContentLoaded", async (event) => {
     console.log("DOM fully loaded and parsed");
-    initArrays();
+    await initArrays();
     mesa1 = [...loadTable(mesa1x, mesa1y)];
     drawMesa(mesa1);
     await crearFichas();
